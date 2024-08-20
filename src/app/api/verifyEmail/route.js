@@ -6,33 +6,55 @@ dbConnect();
 export async function POST(request) {
   try {
     const reqBody = await request.json();
-    const { token } = reqBody;
-    console.log(token);
+    const { username, verifyCode } = reqBody;
 
-    const user = await User.findOne({
-      verifyToken: token,
-      verifyTokenExpiry: { $gt: Date.now() },
-    });
+    const user = await User.findOne({ username });
 
     if (!user) {
-      return Response.json({ error: "Invalid Token details" }, { status: 400 });
+      return Response.json(
+        { error: "Invalid User, Please Sign-up first" },
+        { status: 400 }
+      );
     }
 
-    console.log(user);
+    if(user.isVerified) {
+      return Response.json(
+        { message: "User Already Verified", success: false },
+        { status: 400 }
+      );
+    }
 
-    user.isVerified = true;
-    user.verifyToken = undefined;
-    user.verifyTokenExpiry = undefined;
+    const verifyCodeExpiry = user.verifyCodeExpiry; 
+    if(verifyCodeExpiry < Date.now()) {
+      return Response.json({message : "Verification code expired, Please sign in again", success : false},{status : 400})
+    }
 
-    await user.save();
+    console.log("verified :", user);
 
-    return Response.json(
-      { message: "Email Verified Succesfully", success: true },
-      { status: 200 }
-    );
+    if (verifyCode === user.verifyCode) {
+      user.isVerified = true;
+      user.verifyCode = undefined;
+      user.verifyCodeExpiry = undefined;
+
+      await user.save();
+
+      return Response.json(
+        { message: "Email Verified Succesfully", success: true },
+        { status: 200 }
+      );
+    }
+    else {
+      return Response.json(
+        { message: "Please enter correct verfication code !", success: false },
+        { status: 400 }
+      );
+    }
+
+
+
   } catch (error) {
     return Response.json(
-      { error: error.message, success: false },
+      { error: "Error verifying user" + error.message, success: false },
       { status: 500 }
     );
   }

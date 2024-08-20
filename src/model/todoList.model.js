@@ -30,4 +30,4 @@ const todoListSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const TodoList = mongoose.model.TodoList || mongoose.model("TodoList", todoListSchema);
+export const TodoList = mongoose.models.TodoList || mongoose.model("TodoList", todoListSchema);
