@@ -1,10 +1,11 @@
 import dbConnect from "@/lib/dbConnect";
+import { NextResponse } from "next/server";
 
 await dbConnect();
 
 export async function GET(request) {
   try {
-    const response = Response.json({
+    const response = NextResponse.json({
       message: "Logout Successfully",
       success: true,
     });
@@ -18,7 +19,7 @@ export async function GET(request) {
   } catch (error) {
     return Response.json(
       {
-        error: error.message,
+        error: "Error in logging out : " + error.message,
       },
       {
         status: 500,

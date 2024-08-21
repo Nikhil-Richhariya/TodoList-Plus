@@ -2,6 +2,7 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dbConnect from "@/lib/dbConnect";
 import { User } from "@/model/user.model";
+import { NextResponse } from "next/server";
 
 await dbConnect();
 
@@ -11,17 +12,25 @@ export async function POST(request) {
     const { email, password } = reqBody;
 
     // validation
-    console.log(reqBody);
+    // console.log(reqBody);
 
     const user = await User.findOne({ email });
 
-    if (!user)
+    if (!user){
       return Response.json(
         { success: false, message: "User does not exists" },
         { status: 400 }
       );
+    }
 
     console.log("user exists");
+
+    if(!user.isVerified) {
+      return Response.json(
+        { success: false, message: "Please Verify your email" },
+        { status: 400 }
+      );
+    }
 
     const validPassword = await bcryptjs.compare(password, user.password);
 
@@ -37,17 +46,19 @@ export async function POST(request) {
       );
     }
 
+
+    // generating token
     const tokenPayLoad = {
       id: user._id,
       username: user.username,
       email: user.email,
     };
 
-    const token = jwt.sign(tokenPayLoad, process.env.TOKEN_SECERET, {
+    const token = await jwt.sign(tokenPayLoad, process.env.TOKEN_SECRET, {
       expiresIn: "1d",
     });
 
-    const response = Response.json({
+    const response = NextResponse.json({
       message: "Logged in succesfully",
       success: true,
     });
@@ -57,11 +68,12 @@ export async function POST(request) {
     });
 
     return response;
+
   } catch (error) {
     return Response.json(
       {
         success : false,
-        message: error.message,
+        message: "Error in sign-up" + error.message,
       },
       {
         status: 500,
