@@ -17,9 +17,9 @@ export const sendMail =  async  (receiverMail, code) => {
     const info = await transporter.sendMail({
         from: `"Todo List Plus" <${process.env.MAIL}>`, // sender address
         to: receiverMail, // list of receivers
-        subject: "Verification Code - Todo List Plus", // Subject line
-        text: "Welcome to TodoList Plus. This is your verification code : ", // plain text body
-        html: `<h1>${code}</h1>`, // html body
+        subject: "Todo List Plus | Verification Code", // Subject line
+        text: "", // plain text body
+        html: `<h1>Welcome to TodoList Plus. This is your verification code : <strong>${code}<strong></h1>`, // html body
       });
     
       console.log("Message sent: %s", info.messageId);
@@ -32,6 +32,6 @@ export const sendMail =  async  (receiverMail, code) => {
    } catch (error) {
         console.log("Error sending Email ", error); 
    }
-    // Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
+    
   }
   

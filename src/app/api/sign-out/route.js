@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 await dbConnect();
 
-export async function GET(request) {
+export async function POST(request) {
   try {
     const response = NextResponse.json({
       message: "Logout Successfully",
@@ -14,7 +14,7 @@ export async function GET(request) {
       httpOnly: true,
       expires: new Date(0),
     });
-
+    console.log("Logged Out Succesfully "); 
     return response;
   } catch (error) {
     return NextResponse.json(
