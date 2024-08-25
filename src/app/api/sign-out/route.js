@@ -17,7 +17,7 @@ export async function GET(request) {
 
     return response;
   } catch (error) {
-    return Response.json(
+    return NextResponse.json(
       {
         error: "Error in logging out : " + error.message,
       },

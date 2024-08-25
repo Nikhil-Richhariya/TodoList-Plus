@@ -17,8 +17,14 @@ const todoListSchema = new mongoose.Schema(
     },
     tasks: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Task",
+        content: {
+          type: String,
+          required: true,
+        },
+        isComplete: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
 

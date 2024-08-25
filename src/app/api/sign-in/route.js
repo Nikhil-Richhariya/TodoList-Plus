@@ -17,7 +17,7 @@ export async function POST(request) {
     const user = await User.findOne({ email });
 
     if (!user){
-      return Response.json(
+      return NextResponse.json(
         { success: false, message: "User does not exists" },
         { status: 400 }
       );
@@ -26,7 +26,7 @@ export async function POST(request) {
     console.log("user exists");
 
     if(!user.isVerified) {
-      return Response.json(
+      return NextResponse.json(
         { success: false, message: "Please Verify your email" },
         { status: 400 }
       );
@@ -35,7 +35,7 @@ export async function POST(request) {
     const validPassword = await bcryptjs.compare(password, user.password);
 
     if (!validPassword) {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: "Check your credentials",
@@ -54,7 +54,7 @@ export async function POST(request) {
       email: user.email,
     };
 
-    const token = await jwt.sign(tokenPayLoad, process.env.TOKEN_SECRET, {
+    const token = jwt.sign(tokenPayLoad, process.env.TOKEN_SECRET, {
       expiresIn: "1d",
     });
 
@@ -70,10 +70,10 @@ export async function POST(request) {
     return response;
 
   } catch (error) {
-    return Response.json(
+    return NextResponse.json(
       {
         success : false,
-        message: "Error in sign-up" + error.message,
+        message: "Error in sign-in" + error.message,
       },
       {
         status: 500,

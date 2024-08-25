@@ -2,6 +2,8 @@ import dbConnect from "@/lib/dbConnect";
 import { User } from "@/model/user.model";
 import bcryptjs from "bcryptjs";
 import { sendMail } from "@/lib/nodeMailer";
+import { NextResponse } from "next/server";
+
 
 export async function POST(request) {
   await dbConnect();
@@ -15,7 +17,7 @@ export async function POST(request) {
     });
 
     if (existingUserVerifiedByUsername) {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: "Username is already taken",
@@ -34,7 +36,7 @@ export async function POST(request) {
 
     if (existingUserByEmail) {
       if (existingUserByEmail.isVerified) {
-        return Response.json(
+        return NextResponse.json(
           {
             success: false,
             message: "User already exists with this email",
@@ -70,7 +72,7 @@ export async function POST(request) {
     const emailResponse = await sendMail(email, verifyCode);
 
     if (!emailResponse.success) {
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: emailResponse.message,
@@ -79,7 +81,7 @@ export async function POST(request) {
       );
     }
 
-    return Response.json(
+    return NextResponse.json(
       {
         success: true,
         message: "Username registered succesfully. Please verify your email",
@@ -88,7 +90,7 @@ export async function POST(request) {
     );
   } catch (error) {
     console.error("Error registering user ", error);
-    return Response.json(
+    return NextResponse.json(
       {
         success: false,
         message: "Error registering user",
