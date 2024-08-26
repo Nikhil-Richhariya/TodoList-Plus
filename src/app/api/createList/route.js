@@ -2,19 +2,26 @@ import dbConnect from "@/lib/dbConnect";
 import { User } from "@/model/user.model";
 import { TodoList } from "@/model/todoList.model";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 await dbConnect();
 
 export async function POST(request) {
   try {
     const reqBody = await request.json();
-    const { username, title } = reqBody;
+    const { title } = reqBody;
+
+    const token = request.cookies.get("token").value;
+    const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+
+    //sure to have token as it is handled by middleware
+    const { username } = decodedToken;
 
     const user = await User.findOne({ username });
 
     if (!user) {
       return NextResponse.json(
-        { error: "User does not Exists", success : false },
+        { error: "User does not Exists", success: false },
         { status: 400 }
       );
     }

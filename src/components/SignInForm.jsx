@@ -18,7 +18,7 @@ export default function SignInForm({onSubmit}) {
 
   return (
     <div className=" bg-cyan-400 flex flex-col justify-center items-center w-screen h-screen border-red-200">
-      <h2 className="text-2xl font-bold mb-6">Sign Up</h2>
+      <h2 className="text-2xl font-bold mb-6">Sign In</h2>
       <form onSubmit={handleSubmit(onSubmitHandler)} className=''>
 
         
@@ -80,7 +80,7 @@ export default function SignInForm({onSubmit}) {
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600"
           >
-            Sign Up
+            Sign In
           </button>
         </div>
       </form>

@@ -2,12 +2,20 @@ import { TodoList } from "@/model/todoList.model";
 import { User } from "@/model/user.model";
 import dbConnect from "@/lib/dbConnect";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function GET(request) {
   try {
     await dbConnect();
-    const url = new URL(request.url);
-    const username = url.searchParams.get("username");
+    // const url = new URL(request.url);
+    // const username = url.searchParams.get("username");
+
+    const token = request.cookies.get('token').value;
+    const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+
+    //sure to have token as it is handled by middleware
+    const {username} = decodedToken;
+    
 
     const user = await User.findOne({ username });
 

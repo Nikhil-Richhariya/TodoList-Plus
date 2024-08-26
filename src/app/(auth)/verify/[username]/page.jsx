@@ -17,10 +17,10 @@ const page = ({ params }) => {
     } = useForm();
 
     const router = useRouter();
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         try {
             const { verifyCode } = data;
-            const response = axios.post('/api/verifyEmail', { verifyCode, username });
+            const response = await axios.post('/api/verifyEmail', { verifyCode, username });
             console.log(response);
             router.replace(`/sign-in`);
 

@@ -8,9 +8,9 @@ const page = () => {
 
     const router = useRouter(); 
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         try {
-            const response = axios.post('/api/sign-up', data);
+            const response = await axios.post('/api/sign-up', data);
             router.replace(`/verify/${data.username}`);
             console.log(response);
             

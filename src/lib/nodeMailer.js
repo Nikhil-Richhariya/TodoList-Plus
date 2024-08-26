@@ -19,7 +19,7 @@ export const sendMail =  async  (receiverMail, code) => {
         to: receiverMail, // list of receivers
         subject: "Todo List Plus | Verification Code", // Subject line
         text: "", // plain text body
-        html: `<h1>Welcome to TodoList Plus. This is your verification code : <strong>${code}<strong></h1>`, // html body
+        html: `<h1>Welcome to TodoList Plus.</h1> <p> This is your verification code : </p> <h1><strong>${code}<strong></h1>`, // html body
       });
     
       console.log("Message sent: %s", info.messageId);

@@ -8,10 +8,12 @@ const SignIn = () => {
 
     const router = useRouter(); 
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         try {
-            const response = axios.post('/api/sign-in', data);
+            const response = await axios.post('/api/sign-in', data);
+            console.log("redirect");
             router.replace(`/home`);
+            
             console.log(response);
             
         } catch (error) {
